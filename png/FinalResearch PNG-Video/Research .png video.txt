@@ -1,0 +1,44 @@
+ffmpeg -i filegoc.mp4 -c:v libx264 -c:a aac -strict experimental -f hls -hls_time 10 -hls_list_size 0 -segment_time 2000000 segment_list output.m3u8 ts/output%03d.ts
+
+ffmpeg -i filegoc1.mp4 -c:v libx264 -c:a aac -strict experimental -f hls -hls_list_size 1500000 -reset_timestamps 1 output.m3u8
+#!/bin/bash
+
+ffmpeg -i filegoc1.mp4 -c copy -map 0 -f segment -segment_list playlist.m3u8 -segment_time 2 -reset_timestamps 1 -segment_format mpegts -bufsize 2000k output%03d.ts
+
+ffmpeg -i filegoc1.mp4 -c copy -map 0 -f segment -segment_list playlist.m3u8 -reset_timestamps 1 -segment_format mpegts -bufsize 1500k output%03d.ts
+
+ffmpeg -i filegoc.mp4 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k filegoc1.mp4
+
+
+input_file="input.mp4"
+output_directory="output_folder"
+segment_size=2000000  # 2 MB
+
+mkdir -p $output_directory
+
+ffmpeg -i $input_file -c copy -map 0 -f segment -segment_time $segment_size -reset_timestamps 1 -segment_list $output_directory/output.m3u8 $output_directory/output%03d.ts
+
+function noifile() {
+    // Đọc nội dung của tệp PNG header
+    const pngread = fs.readFileSync("D:/Temp/tsfile/filegoc1px.png")
+    //const a = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
+    const pngHeader = Buffer.from(pngread);
+    const bien = 'D:/Temp/tsfile/output0.ts'
+    //console.log(pngHeader)
+    // Đọc nội dung của tệp TS
+    const tsFilePath = 'D:/Temp/tsfile/output0.ts' // Thay thế bằng đường dẫn đến tệp TS của bạn
+    const tsData = fs.readFileSync(tsFilePath);
+
+    // Chèn mã PNG header vào tiêu đề của tệp TS
+    const newData = Buffer.concat([pngHeader, tsData]);
+
+    // Ghi dữ liệu mới vào tệp TS
+    const outputFilePath = 'segment_000.png'; // Tên tệp đầu ra
+    fs.writeFileSync(outputFilePath, newData);
+}
+
+Note:
+- Dùng ffmpeg để giảm dung lượng video, và cắt thành các segment ts, tự sinh ra file output.m3u8 , 
+- Sau đó dùng fs trong nodejs nối file ảnh gốc png vào các segment ts. 
+- Up lên tiktok
+Lưu ý file ảnh gốc .png
