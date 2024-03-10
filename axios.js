@@ -47,7 +47,7 @@ function getLinklh3(uri) {
 }
 
 function xuly_file_m3u8(sotap, idfilm){
-  let linkport1 = "https://animevietsub.fan/ajax/player"
+  let linkport1 = "https://animevietsub.io/ajax/player"
   const postData = {
     episodeId: sotap,
     backup: '1',
@@ -75,7 +75,7 @@ function xuly_file_m3u8(sotap, idfilm){
 }
 
 function xuly_file_m3u82(link, id){
-  let linkport1 = "https://animevietsub.fan/ajax/player"
+  let linkport1 = "https://animevietsub.io/ajax/player"
   const postData = {
     link: link,
     id: id,
