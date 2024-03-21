@@ -107,7 +107,7 @@ function doc_xuly_m3u8_new(link) {
     .then(response => {
       //console.log(response.data)
       let data = response.data
-      let urlendpoint = '//127.0.0.1:3000'
+      let urlendpoint = '//115.79.38.161:3000'
       if (data) {
         var _datanew = replaceall('//', urlendpoint + '/f?url=//', data)
 

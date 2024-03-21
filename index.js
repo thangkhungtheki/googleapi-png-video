@@ -14,13 +14,16 @@ const fs = require('fs')
 const cors = require('cors');
 const { constants } = require('buffer');
 // Thiết lập CORS
-app.use(cors());
+const useCors = {
+    origin: '*'
 
-// const useCors = {
-//     origin: ['http://localhost:5002']
-// }
+}
 // Các tùy chọn CORS cụ thể
-app.options('*',cors());
+// app.options(useCors,cors());
+app.use(cors(useCors));
+
+
+
 
 app.get('/a',(req, res) =>{
     res.render('aaa')
@@ -47,19 +50,36 @@ app.get('/f', async (req, res) =>{
     res.redirect(rurl)
 })
 app.get('/g',  async (req, res) => { // Queue parrams: 127.0.0.1:3000/g?idunique=...&idfilm=... 
-    let idunique = req.query.idunique
-    let idfilm = req.query.idfilm
+
+    //  setTimeout(async() => {
+        let idunique = req.query.idunique
+        let idfilm = req.query.idfilm
     // console.log(idunique)
     // console.log(idfilm)
-    let _html = await getLh3.xuly_file_m3u8(idunique, idfilm)
-    let _linkm3u8 = await getLh3.xuly_file_m3u82(_html, idfilm)
-    let _data_m3u8 = await getLh3.doc_xuly_m3u8_new(_linkm3u8)
+        let _html = await getLh3.xuly_file_m3u8(idunique, idfilm)
+        let _linkm3u8 = await getLh3.xuly_file_m3u82(_html, idfilm)
+        let _data_m3u8 = await getLh3.doc_xuly_m3u8_new(_linkm3u8)
     
     //console.log(_data_m3u8)
-    res.set('Content-Disposition', 'attachment; filename="file.m3u8"');
-    res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+        res.set('Content-Disposition', 'attachment; filename="file.m3u8"');
+        res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
     // res.sendFile(__dirname + '\\png\\auto.m3u8') // return text ?
-    res.send(_data_m3u8)
+        res.send(_data_m3u8)
+    //   }, 8000);
+
+    // let idunique = req.query.idunique
+    // let idfilm = req.query.idfilm
+    // // console.log(idunique)
+    // // console.log(idfilm)
+    // let _html = await getLh3.xuly_file_m3u8(idunique, idfilm)
+    // let _linkm3u8 = await getLh3.xuly_file_m3u82(_html, idfilm)
+    // let _data_m3u8 = await getLh3.doc_xuly_m3u8_new(_linkm3u8)
+    
+    // //console.log(_data_m3u8)
+    // res.set('Content-Disposition', 'attachment; filename="file.m3u8"');
+    // res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
+    // // res.sendFile(__dirname + '\\png\\auto.m3u8') // return text ?
+    // res.send(_data_m3u8)
 })
 
 app.get("/seprate-thread", (req, res) => {
